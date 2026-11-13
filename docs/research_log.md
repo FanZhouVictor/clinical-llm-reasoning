@@ -6,7 +6,7 @@ how they were compared, which one won, and why. Numbers here must come from runs
 that are committed and reproducible; link the script or config that produced them.
 
 **Plan:** [plan_v0.1.md](plan_v0.1.md) ·
-**Decisions:** [0001 open-model selection](decisions/0001-open-model-selection.md)
+**Decisions:** [0001 open-model selection](decisions/0001-open-model-selection.md) · [0002 training models and compute](decisions/0002-training-models-and-compute.md)
 
 | Step | Problem | Status | Entry |
 |---|---|---|---|
