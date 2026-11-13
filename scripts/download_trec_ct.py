@@ -36,11 +36,12 @@ FILES: dict[str, str] = {
     },
 }
 
+HEADERS = {"User-Agent": "clinical-llm-reasoning-downloader/0.1"}
 REPO_MANIFEST = Path(__file__).resolve().parents[1] / "manifests" / "trec_ct.sha256"
 
 
 def remote_size(url: str) -> int | None:
-    req = urllib.request.Request(url, method="HEAD")
+    req = urllib.request.Request(url, method="HEAD", headers=HEADERS)
     with urllib.request.urlopen(req, timeout=60) as resp:
         length = resp.headers.get("Content-Length")
     return int(length) if length else None
@@ -48,7 +49,8 @@ def remote_size(url: str) -> int | None:
 
 def download(url: str, dest: Path) -> None:
     tmp = dest.with_suffix(dest.suffix + ".part")
-    with urllib.request.urlopen(url, timeout=120) as resp, tmp.open("wb") as fh:
+    req = urllib.request.Request(url, headers=HEADERS)
+    with urllib.request.urlopen(req, timeout=120) as resp, tmp.open("wb") as fh:
         shutil.copyfileobj(resp, fh, length=1 << 20)
     tmp.replace(dest)
 
