@@ -5,10 +5,13 @@ traceable: what problem we are solving, which candidate solutions were considere
 how they were compared, which one won, and why. Numbers here must come from runs
 that are committed and reproducible; link the script or config that produced them.
 
+**Plan:** [plan_v0.1.md](plan_v0.1.md) ·
+**Decisions:** [0001 open-model selection](decisions/0001-open-model-selection.md)
+
 | Step | Problem | Status | Entry |
 |---|---|---|---|
 | 0 | Reproducible project scaffold | done | [steps/step0_scaffold.md](steps/step0_scaffold.md) |
-| 1 | Load and inspect TREC Clinical Trials data | planned | — |
+| 1 | Load and inspect TREC Clinical Trials data | in progress | — |
 | 2 | Baselines for patient–trial eligibility | planned | — |
 | 3 | Turn eligibility criteria into a reasoning graph | planned | — |
 
