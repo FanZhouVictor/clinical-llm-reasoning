@@ -131,7 +131,12 @@ def split_criteria(text: str | None) -> tuple[str | None, str | None, str]:
             current = "inclusion" if kind == "inclusion" else "exclusion"
             has_header = True
             has_inclusion_header |= current == "inclusion"
-            line = header.group("body") or ""
+            body = header.group("body")
+            if body is None and len(line.split()) > 8:
+                # Long colon-less header lines often carry criterion text
+                # ("... for controls males and females of 18 years ..."); keep them.
+                body = line.strip()
+            line = body or ""
 
         inline = _INLINE_EXCLUSION.search(line)
         if inline is not None:

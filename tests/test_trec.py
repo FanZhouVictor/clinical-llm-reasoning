@@ -478,3 +478,13 @@ def test_split_criteria_inline_past_tense_exclusion():
 def test_split_criteria_combined_header_is_not_a_section():
     _, _, status = split_criteria("Inclusion/exclusion criteria:\nAdults with asthma.")
     assert status == "unsectioned"
+
+
+def test_split_criteria_keeps_text_of_long_header_without_colon():
+    inclusion, exclusion, status = split_criteria(
+        "Inclusion criteria for controls (all three) males and females"
+        " of 18 years of age and older.\n- healthy\nExclusion criteria:\n- smoker"
+    )
+    assert status == "both"
+    assert "18 years of age" in inclusion
+    assert exclusion == "- smoker"
