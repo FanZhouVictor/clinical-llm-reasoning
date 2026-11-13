@@ -221,7 +221,7 @@ __marimo__/
 
 
 # Project data and outputs (downloaded or generated; not versioned)
-data/
-outputs/
-runs/
+/data/
+/outputs/
+/runs/
 *.jsonl.gz
