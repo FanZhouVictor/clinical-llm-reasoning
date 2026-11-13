@@ -1,0 +1,13 @@
+# Default configuration. Any value can be overridden by an environment variable
+# named CLINREASON_<KEY> (upper case), e.g. CLINREASON_DATA_DIR=/mnt/d/clinreason/data
+
+# Where downloaded datasets and caches live. Never inside the git repository.
+data_dir: ~/clinreason-data
+
+# OpenAI-compatible endpoint (vLLM, Ollama, or a hosted API).
+llm_base_url: http://localhost:8000/v1
+llm_model: Qwen/Qwen2.5-7B-Instruct-AWQ
+llm_temperature: 0.0
+
+# Fixed seed for sampling and any stochastic step.
+seed: 13

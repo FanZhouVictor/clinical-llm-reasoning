@@ -34,6 +34,23 @@ Experiments use publicly available data only, starting with the
 descriptions and relevance judgments over ClinicalTrials.gov records.
 Datasets are downloaded by scripts and are not stored in this repository.
 
+## Install
+
+```bash
+git clone https://github.com/FanZhouVictor/clinical-llm-reasoning.git
+cd clinical-llm-reasoning
+pip install -e ".[dev]"
+pytest
+```
+
+Settings live in `configs/default.yaml`; override any key with an environment
+variable `CLINREASON_<KEY>` (e.g. `CLINREASON_DATA_DIR=/path/to/data`).
+
+## Research log
+
+Each step records the problem, candidate methods, how they were compared, and
+which one was chosen and why: see [docs/research_log.md](docs/research_log.md).
+
 ## Related work
 
 The method draws on ideas from graph-guided proactive information seeking
