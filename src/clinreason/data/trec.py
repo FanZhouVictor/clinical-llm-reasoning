@@ -9,14 +9,23 @@ from html import unescape
 from pathlib import Path
 from zipfile import ZipFile
 
+# A header line: optional bullet/number marker, up to three qualifier words
+# ("Key", "Major", "Infant", "Recipient", ...; never "non" or connecting words such
+# as "for"/"of", which would match wrapped prose), the section kind, optional
+# "criteria", an optional "for X" / "- X" qualifier, then either ":" + body text or
+# an optional "." ending the line. Also "Criteria for inclusion/exclusion".
+_MARKER = r"(?:[-•*]|\(?\d{1,2}[.)]|\(?[a-z][.)])?\s*"
+_STOP = r"(?:non|for|of|to|and|or|with|in|the|are|were|is)\b"
+_QUALIFIERS = rf"(?:(?!{_STOP})[a-z]+(?:\s*/\s*[a-z]+)?\s+){{0,3}}"
+_KINDS = r"non[-\s]*inclusion|inclusion|exclusion"
 _HEADER = re.compile(
-    r"^\s*(?:(?:key|main|general|patient(?:\s*/\s*subject)?|subject)\s+)?"
-    r"(?P<kind>non[-\s]+inclusion|inclusion|exclusion)\s+criteria\b"
-    r"(?:\s+for\s+[^:\n]+)?\s*(?::\s*(?P<body>.*))?$",
+    rf"^\s*{_MARKER}(?:{_QUALIFIERS}(?P<kind>{_KINDS})(?:\s+criteria)?"
+    rf"|criteria\s+for\s+(?P<kind2>{_KINDS}))"
+    r"(?:\s*(?:-|for)\s+[^:.\n]+)?(?:\s*:\s*(?P<body>.*)|\s*\.?\s*)$",
     re.IGNORECASE,
 )
 _INLINE_EXCLUSION = re.compile(
-    r"\b(?:exclusion|non[-\s]+inclusion)\s+criteria\s+includes?\b", re.IGNORECASE
+    r"\b(?:exclusion|non[-\s]+inclusion)\s+criteria\s+includ(?:e|es|ed)\b", re.IGNORECASE
 )
 _AGE = re.compile(r"(\d+(?:\.\d+)?)\s+(years?|months?|weeks?|days?)", re.IGNORECASE)
 _NCT_ID = re.compile(r"NCT\d{8}")
@@ -118,7 +127,7 @@ def split_criteria(text: str | None) -> tuple[str | None, str | None, str]:
         header = _HEADER.match(line)
         if header is not None:
             flush()
-            kind = header.group("kind").lower()
+            kind = (header.group("kind") or header.group("kind2")).lower()
             current = "inclusion" if kind == "inclusion" else "exclusion"
             has_header = True
             has_inclusion_header |= current == "inclusion"

@@ -436,3 +436,45 @@ def test_build_tables_uses_configured_data_dir_and_handles_no_judgments(tmp_path
     assert stats["missing_nct_ids"] == []
     assert stats["split_status_counts"] == dict.fromkeys(SPLIT_STATUSES, 0)
     assert stats["sectioned_share"] == 0.0
+
+
+@pytest.mark.parametrize(
+    ("inc_header", "exc_header"),
+    [
+        ("Inclusion:", "Exclusion:"),
+        ("- Inclusion Criteria:", "- Exclusion Criteria:"),
+        ("1. Inclusion criteria", "2. Exclusion criteria"),
+        ("a. Inclusion", "b. Exclusion"),
+        ("Major inclusion criteria:", "Major exclusion criteria:"),
+        ("Infant Inclusion Criteria:", "Recipient Exclusion Criteria:"),
+        ("Inclusion criteria - donor:", "Criteria for exclusion:"),
+        ("Inclusion criteria.", "Exclusion criteria."),
+    ],
+)
+def test_split_criteria_header_variants(inc_header, exc_header):
+    text = f"{inc_header}\n- adult\n{exc_header}\n- pregnant"
+    inclusion, exclusion, status = split_criteria(text)
+    assert status == "both"
+    assert inclusion == "- adult"
+    assert exclusion == "- pregnant"
+
+
+def test_split_criteria_non_inclusion_with_marker_is_exclusion():
+    inclusion, exclusion, status = split_criteria(
+        "- Inclusion criteria:\n- adult\n- Non inclusion criteria:\n- pregnant"
+    )
+    assert (inclusion, exclusion, status) == ("- adult", "- pregnant", "both")
+
+
+def test_split_criteria_inline_past_tense_exclusion():
+    inclusion, exclusion, status = split_criteria(
+        "Adults with uveitis were eligible. Exclusion criteria included prior surgery."
+    )
+    assert status == "both"
+    assert "uveitis" in inclusion
+    assert exclusion.startswith("prior surgery")
+
+
+def test_split_criteria_combined_header_is_not_a_section():
+    _, _, status = split_criteria("Inclusion/exclusion criteria:\nAdults with asthma.")
+    assert status == "unsectioned"
