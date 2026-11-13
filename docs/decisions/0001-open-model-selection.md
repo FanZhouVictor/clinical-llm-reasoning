@@ -60,6 +60,20 @@ date were checked against the Hugging Face API on 2026-11-13.
 - Licences: MIT applies to this code, not to model weights. MedGemma (HAI-DEF) is gated
   and prohibits automated clinical decisions; offline research use on TREC only.
 
+## Update 2026-11-13: cluster compute (NCSA Delta, 4 × A100)
+
+The 20 GB limit above now applies only to the desktop. On Delta:
+
+- **Upper bound / teacher:** `Qwen/Qwen3-32B` (BF16 with tensor parallelism across GPUs)
+  is added as the strongest prompted model and as the SFT teacher (Step 8a).
+- **Qwen3-14B** can run in BF16, removing the quantization confound at that scale.
+- **Training models (Step 8):** Qwen3-1.7B (smoke tests on the desktop, full runs on
+  Delta) and **Qwen3-8B** (LoRA SFT + GRPO on Delta), so the comparison covers small vs
+  main-model scale.
+- The desktop pilot stays as planned; the pilot winner is confirmed in BF16 on Delta.
+- Exact repository revisions and Delta GPU memory (40 GB vs 80 GB per A100) are recorded
+  when the first cluster job runs.
+
 ## Pilot results
 
 _To be filled in by Step 2._
