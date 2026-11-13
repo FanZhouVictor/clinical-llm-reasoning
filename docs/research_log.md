@@ -5,7 +5,7 @@ traceable: what problem we are solving, which candidate solutions were considere
 how they were compared, which one won, and why. Numbers here must come from runs
 that are committed and reproducible; link the script or config that produced them.
 
-**Plan:** [plan_v0.1.md](plan_v0.1.md) ·
+**Plan:** [plan_v0.1.md](plan_v0.1.md) · [training_plan.md](training_plan.md) (SFT + RL) ·
 **Decisions:** [0001 open-model selection](decisions/0001-open-model-selection.md) · [0002 training models and compute](decisions/0002-training-models-and-compute.md)
 
 | Step | Problem | Status | Entry |

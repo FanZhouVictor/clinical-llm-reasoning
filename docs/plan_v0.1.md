@@ -50,9 +50,12 @@ stay on cluster storage, and only small result files are copied back. Model choi
 | **5. Conformal abstention** | Split conformal on the eligibility label; calibrate on 2021, test on 2022 | Uncertainty quantification | Coverage within ±3 points of target at 80/90/95%; abstention-vs-accuracy curves; shift reported honestly |
 | **6. Decisive-gap questioning** | Hide sentences from the note; simulated patient answers; GPS ordering (Eq. 1–2, p. 5) vs random, ask-all, LLM-chooses | Information seeking | Accuracy vs number of questions; target: reach full-note accuracy with fewer questions |
 | **7. Faithfulness** | Change the evidence a decision path cites; does the decision change? | Measured explainability | Flip rate vs a random-evidence control |
-| **8a. SFT** | LoRA fine-tuning on teacher reasoning traces (Qwen3-32B or the best prompted model), kept only when the final label matches the TREC label (rejection sampling); 2021 data only | Supervised fine-tuning; mirrors BoG's SFT stage (p. 4) | Training/validation loss curves; SFT model beats its untrained base on 2022 |
-| **8b. GRPO** | Start from the SFT model; reward = correct label × (efficiency bonus for fewer criteria checked / questions asked) + format validity, after GPS Eq. 13 (p. 7) and BoG's hybrid reward (p. 5) | Reinforcement learning with verifiable rewards | SFT+GRPO beats SFT-only on 2022 at equal or lower cost per decision; reward and length curves logged |
-| **8c. Comparison** | Base vs SFT vs GRPO-only vs SFT+GRPO, at 1.7B and 8B, against prompted 8B / 32B | Answers "can a small trained model match a large prompted one?" | One table on full 2022, with and without trials shared with 2021 |
+| **8a. SFT** | LoRA fine-tuning of Qwen3-1.7B / Qwen3-8B (and one Qwen2.5-7B run) on Qwen3-32B traces, kept only when the label matches TREC; 2021 train patients only | Supervised fine-tuning; mirrors BoG's SFT stage (p. 4) | SFT 8B beats base 8B on 2022 macro-F1 |
+| **8b. GRPO** | From the SFT model; reward = r_acc · (1 + λ·r_eff) + r_fmt, after GPS Eq. 13 (p. 7) and BoG's hybrid reward (p. 5) | Reinforcement learning with verifiable rewards | SFT+GRPO beats SFT-only, or matches it with fewer tokens |
+| **8c. Comparison** | Base vs SFT vs GRPO-only vs SFT+GRPO at 1.7B and 8B, against prompted 8B / 32B; λ and data-size ablations | "Can a small trained model match a large prompted one?" | One table on full 2022, with and without shared trials |
+
+Full detail (splits, teacher data, reward, settings, order of work, time estimates):
+[training_plan.md](training_plan.md).
 
 ## Step 3 candidates (to be decided with data)
 
